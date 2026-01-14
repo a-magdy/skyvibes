@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-to-b from-sky-blue to-blue-200 min-h-screen;
+  }
+}
+
+@layer components {
+  .weather-card {
+    @apply bg-white rounded-3xl shadow-2xl p-8 transform transition-all duration-300 hover:scale-105;
+  }
+
+  .big-temp {
+    @apply text-8xl font-bold text-gray-800;
+  }
+
+  .touch-target {
+    @apply min-w-[44px] min-h-[44px] flex items-center justify-center;
+  }
+}
