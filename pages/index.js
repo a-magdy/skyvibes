@@ -2,36 +2,23 @@ import { useState } from "react";
 import Head from "next/head";
 import WeatherDisplay from "../components/WeatherDisplay";
 import SearchBox from "../components/SearchBox";
+import { getCurrentWeather } from "../utils/weatherApi";
 
 export default function Home() {
-  const [location, setLocation] = useState("New York");
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSearch = async (city) => {
     setLoading(true);
+    setError(null);
     try {
-      // TODO: Implement API call
-      // For now, using placeholder data
-      setLocation(city);
-      setTimeout(() => {
-        setWeatherData({
-          location: city,
-          current: {
-            temp: 72,
-            condition: "sunny",
-            humidity: 45,
-            precipitation: 0,
-          },
-          today: {
-            high: 78,
-            low: 65,
-          },
-        });
-        setLoading(false);
-      }, 500);
+      const data = await getCurrentWeather(city);
+      setWeatherData(data);
     } catch (error) {
       console.error("Weather fetch error:", error);
+      setError(error.message);
+    } finally {
       setLoading(false);
     }
   };
@@ -69,9 +56,18 @@ export default function Home() {
           </div>
         )}
 
-        {!loading && weatherData && <WeatherDisplay data={weatherData} />}
+        {error && (
+          <div className="text-center py-12 bg-red-100 rounded-3xl border-4 border-red-300 shadow-lg">
+            <div className="text-6xl mb-4">😢</div>
+            <p className="text-red-600 text-xl font-bold px-6">{error}</p>
+          </div>
+        )}
 
-        {!loading && !weatherData && (
+        {!loading && !error && weatherData && (
+          <WeatherDisplay data={weatherData} />
+        )}
+
+        {!loading && !error && !weatherData && (
           <div className="text-center py-20">
             <div className="text-6xl mb-4">🔍</div>
             <p className="text-white text-2xl">
