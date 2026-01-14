@@ -98,16 +98,16 @@ export async function getCurrentWeather(city) {
           }`
         : city,
       current: {
-        temp: Math.round(parseFloat(current.temp_F)),
+        temp: Math.round(parseFloat(current.temp_C)),
         condition: mapWeatherCondition(current.weatherCode),
         humidity: parseInt(current.humidity),
         precipitation: parseInt(current.precipMM || 0),
         description: current.weatherDesc?.[0]?.value || "Unknown",
       },
       today: {
-        high: Math.round(parseFloat(weather.maxtempF || current.temp_F)),
-        low: Math.round(parseFloat(weather.mintempF || current.temp_F)),
-        feelsLike: Math.round(parseFloat(current.FeelsLikeF)),
+        high: Math.round(parseFloat(weather.maxtempC || current.temp_C)),
+        low: Math.round(parseFloat(weather.mintempC || current.temp_C)),
+        feelsLike: Math.round(parseFloat(current.FeelsLikeC)),
       },
       wind: {
         speed: Math.round(parseFloat(current.windspeedMiles)),
@@ -117,15 +117,15 @@ export async function getCurrentWeather(city) {
       hourly:
         weather.hourly?.slice(0, 12).map((hour) => ({
           time: hour.time,
-          temp: Math.round(parseFloat(hour.tempF)),
+          temp: Math.round(parseFloat(hour.tempC)),
           condition: mapWeatherCondition(hour.weatherCode),
           precipitation: parseInt(hour.precipMM || 0),
         })) || [],
       forecast:
         weatherData.weather?.slice(0, 3).map((day) => ({
           date: day.date,
-          high: Math.round(parseFloat(day.maxtempF)),
-          low: Math.round(parseFloat(day.mintempF)),
+          high: Math.round(parseFloat(day.maxtempC)),
+          low: Math.round(parseFloat(day.mintempC)),
           condition: mapWeatherCondition(day.hourly?.[4]?.weatherCode || "113"),
         })) || [],
       timestamp: new Date().toISOString(),
